@@ -1,3 +1,4 @@
+geoip = require('geoip-lite');
 
-@geolocate(ip, done) ->
-  done null, [1, 14]
+@geolocate = (ip, done) ->
+  done null, geoip.lookup(ip).ll
