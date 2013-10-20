@@ -1,14 +1,29 @@
 ws = require 'ws'
+{EventEmitter} = require 'events'
+
+module.exports = evt = new EventEmitter
 
 socket = ws.connect 'ws://ws.blockchain.info/inv'
-socket.on 'open', ->
-  console.info 'Starting connection'
-  socket.on 'message', (event) ->
-    data = JSON.parse event
-    ip = data.x.relayed_by
-    volume = 0
-    data.x.out.map (e) ->
-      volume += e.value
-    console.log {'ip': ip, 'volume': volume}
-    # TODO: Geolocate and push data to clients
-  socket.send '{"op":"unconfirmed_sub"}'
+
+evt.start = ->
+  socket.on 'open', ->
+    evt.emit 'connected'
+
+    socket.on 'message', (event) ->
+      data = JSON.parse event
+      ip = data.x.relayed_by
+      volume = 0
+      data.x.out.map (e) ->
+        volume += e.value
+
+      evt.emit 'transaction', {'ip': ip, 'volume': volume}
+
+    socket.send '{"op":"unconfirmed_sub"}'
+
+    socket.on 'disconnect', ->
+      evt.emit 'disconnect'
+
+    socket.on 'error', ->
+      evt.emit 'error', arguments
+
+
