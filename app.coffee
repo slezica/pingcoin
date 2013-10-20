@@ -26,7 +26,7 @@ bcoin.on 'transaction', (t) ->
   geoip.geolocate t.ip, (err, latlng) ->
     if not err?
       io.sockets.emit 'transaction',
-        ip : t.ip
+        vol: t.volume
         lat: latlng[0]
         lng: latlng[1] 
 
