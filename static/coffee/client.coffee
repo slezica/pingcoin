@@ -1,3 +1,19 @@
+
+getRadius = (time, radius) ->
+  # 5 seconds growing, 5 decreasing
+  # TODO: Make this a parabole
+  val = 0
+  if time > 5000
+    val = (time - 5000) / 500
+  else if time > 10000
+    val = 0
+  else
+    val = time / 500
+  val * radius
+  
+
+LAPSE = 50
+
 $ ->
   opts =
     zoom: 2
@@ -23,11 +39,22 @@ $ ->
     console.log 'connected'
 
     socket.on 'transaction', (t) ->
-      marker = new google.maps.Marker
-        position: new google.maps.LatLng t.lat, t.lng
+      updates = 1
+      circle = new google.maps.Circle
+        strokeColor: '#FF0000'
+        strokeOpacity: 0.8
+        strokeWeight: 2
+        fillColor: '#FF0000'
+        fillOpacity: 0.35
         map: map
-        title: 'Hello World!'
+        center: new google.maps.LatLng t.lat, t.lng
+        radius: getRadius 1, t.vol
+      update = ->
+        updates += 1
+        elapsed = LAPSE * updates
+        radius = getRadius elapsed, t.vol
+        circle.set 'radius', radius
+        if radius > 0
+          setTimeout update, LAPSE
+      setTimeout update, LAPSE
 
-  # $('body').append """
-  #   <p>#{t.vol}</p>@<span>#{t.lat} #{t.lng}</span>
-  # """
