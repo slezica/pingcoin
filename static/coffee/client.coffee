@@ -31,6 +31,35 @@ $ ->
 
   map = new google.maps.Map document.getElementById("map-canvas"), opts
 
+  ping = ({lat, lng, vol}) ->
+    base_radius = 1000000
+    min_radius = base_radius / 4
+    max_radius = base_radius * 4
+
+    circle = new google.maps.Circle
+      strokeColor: '#FF0000'
+      strokeOpacity: 0.8
+      strokeWeight: 2
+      fillColor: '#FF0000'
+      fillOpacity: 0.35
+      map: map
+      center: new google.maps.LatLng lat, lng
+      radius: base_radius
+
+    shrink = (t) ->
+      circle.set 'radius', circle.radius * 0.9
+      if circle.radius > min_radius
+        setTimeout shrink, 10
+
+    grow = ->
+      circle.set 'radius', circle.radius * 1.1
+      if circle.radius < 2 * base_radius
+        setTimeout grow, 10
+      else
+        shrink()
+
+    grow()
+
   socket = io.connect 'ws://localhost:8000'
 
   socket.on 'disconnect', console.log 
@@ -39,22 +68,4 @@ $ ->
     console.log 'connected'
 
     socket.on 'transaction', (t) ->
-      updates = 1
-      circle = new google.maps.Circle
-        strokeColor: '#FF0000'
-        strokeOpacity: 0.8
-        strokeWeight: 2
-        fillColor: '#FF0000'
-        fillOpacity: 0.35
-        map: map
-        center: new google.maps.LatLng t.lat, t.lng
-        radius: getRadius 1, t.vol
-      update = ->
-        updates += 1
-        elapsed = LAPSE * updates
-        radius = getRadius elapsed, t.vol
-        circle.set 'radius', radius
-        if radius > 0
-          setTimeout update, LAPSE
-      setTimeout update, LAPSE
-
+      ping t
