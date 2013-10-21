@@ -44,7 +44,7 @@ $ ->
 
     grow()
 
-  socket = io.connect 'ws://localhost:8000'
+  socket = io.connect 'ws://pingcoin.slezica.me'
 
   socket.on 'disconnect', console.log 
   socket.on 'error', console.log 
