@@ -1,19 +1,3 @@
-
-getRadius = (time, radius) ->
-  # 5 seconds growing, 5 decreasing
-  # TODO: Make this a parabole
-  val = 0
-  if time > 5000
-    val = (time - 5000) / 500
-  else if time > 10000
-    val = 0
-  else
-    val = time / 500
-  val * radius
-  
-
-LAPSE = 50
-
 $ ->
   opts =
     zoom: 2
@@ -30,17 +14,20 @@ $ ->
     scrollwheel: false
 
   map = new google.maps.Map document.getElementById("map-canvas"), opts
+  min = 100000000
+  max = 0
 
   ping = ({lat, lng, vol}) ->
-    base_radius = 1000000
+    base_radius = Math.log(Math.max(vol, 50000)) / Math.log(1.07) * 2000
+    console.log base_radius
     min_radius = base_radius / 4
     max_radius = base_radius * 4
 
     circle = new google.maps.Circle
-      strokeColor: '#FF0000'
-      strokeOpacity: 0.8
-      strokeWeight: 2
-      fillColor: '#FF0000'
+      strokeColor: '#FFFFFF'
+      strokeOpacity: 0.5
+      strokeWeight: 1
+      fillColor: '#000000'
       fillOpacity: 0.35
       map: map
       center: new google.maps.LatLng lat, lng
