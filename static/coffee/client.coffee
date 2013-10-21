@@ -29,7 +29,7 @@ $ ->
     draggable: false
     scrollwheel: false
 
-  map = new google.maps.Map document.getElementById("map-canvas"), opts
+  map = new google.maps.Map document.getElementById('canvas'), opts
 
   ping = ({lat, lng, vol}) ->
     base_radius = 1000000
