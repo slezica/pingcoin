@@ -17,15 +17,14 @@ $ ->
 
   ping = ({lat, lng, vol}) ->
     base_radius = Math.log(Math.max(vol, 50000)) / Math.log(1.07) * 2000
-    console.log base_radius
     min_radius = base_radius / 4
     max_radius = base_radius * 4
 
     circle = new google.maps.Circle
-      strokeColor: '#FFFFFF'
+      strokeColor: '#FF0000'
       strokeOpacity: 0.5
       strokeWeight: 1
-      fillColor: '#000000'
+      fillColor: '#FF0000'
       fillOpacity: 0.35
       map: map
       center: new google.maps.LatLng lat, lng
