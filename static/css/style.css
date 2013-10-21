@@ -17,8 +17,9 @@ body, html {
 }
 
 footer {
-    bottom: 0;
-    right: 5px;
+    top: 0;
+    right: 0px;
+    padding: 10px 10px 10px 10px;
     font-family: monospace;
     position: absolute;
 }
