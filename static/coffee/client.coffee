@@ -10,8 +10,8 @@ $ ->
     scaleControl: false
     streetViewControl: false
     overviewMapControl: false
-    draggable: false
-    scrollwheel: false
+    draggable: true
+    scrollwheel: true
 
   map = new google.maps.Map document.getElementById('canvas'), opts
 
